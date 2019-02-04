@@ -1,0 +1,23 @@
+{
+    "name": "devlabs91/daemonrunner",
+    "description": "Daemon Runner",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=7.1.16",
+        "clio/clio": "^0.1.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "Devlabs91\\Daemonrunner\\": "./src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Devlabs91\\Daemonrunner\\Tests\\": "tests/src/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.6"
+    }
+}
