@@ -97,7 +97,18 @@ class DaemonService {
      */
     public static function iamalive( string $text ) {
         $content = '['.(new \DateTime())->format( 'Y-m-d H:i:s' ).']'.' '.$text.PHP_EOL;
-        file_put_contents( self::$path.'/runner.log', $content, FILE_APPEND );
+        file_put_contents( self::getLogName('runner.log'), $content, FILE_APPEND );
+    }
+    
+    /**
+     *
+     * @param string $filename
+     * @return string
+     */
+    public static function getLogName( $filename ) {
+        $fullFilename = self::$path.'/'.$filename;
+        if( ! is_dir( dirname( $fullFilename ) ) ) { mkdir( dirname( $fullFilename ), 0755, true ); }
+        return $fullFilename;
     }
     
     /**
