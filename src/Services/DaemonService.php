@@ -6,8 +6,7 @@ use Clio;
 class DaemonService {
     
     private static $path = "/tmp/daemonrunner";
-    private static $umask = '0000';
-    private static $mode = '0777';
+    private static $mode = '0755';
     
     private static $service;
     
@@ -17,10 +16,7 @@ class DaemonService {
      */
     public static function requestExitService( $filename ) {
         if( !self::exitService( $filename ) ) {
-            $old = umask( self::$umask );
             touch( self::getFileName( $filename.'.exit' ) );
-            chmod( self::getFileName( $filename.'.exit' ), self::$mode);
-            umask( $old );
         }
     }
     
@@ -133,9 +129,7 @@ class DaemonService {
     public static function getFileName( $filename ) {
         $fullFilename = self::$path.'/'.$filename;
         if( ! is_dir( dirname( $fullFilename ) ) ) {
-            $old = umask( self::$umask );
             mkdir( dirname( $fullFilename ), self::$mode, true );
-            umask( $old );
         }
         return $fullFilename;
     }
