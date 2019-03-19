@@ -6,6 +6,9 @@ use Clio;
 class DaemonService {
     
     private static $path = "/tmp/daemonservice";
+    private static $umask = '0000';
+    private static $mode = '0777';
+    
     private static $service;
     
     /**
@@ -13,7 +16,12 @@ class DaemonService {
      * @param string $filename
      */
     public static function requestExitService( $filename ) {
-        touch( self::getFileName( $filename.'.exit' ));
+        if( !self::exitService( $filename ) ) {
+            $old = umask( self::$umask );
+            touch( self::getFileName( $filename.'.exit' ) );
+            chmod( self::getFileName( $filename.'.exit' ), self::$mode);
+            umask( $old );
+        }
     }
     
     /**
@@ -51,6 +59,12 @@ class DaemonService {
         if( Clio\Daemon::isRunning( $pid ) ) { return true; }
         else { self::unlinkFiles( $filename ); }
         return false;
+    }
+    
+    public static function getPid( $filename) {
+        $filename = self::getFileName( $filename.'.pid' );
+        if( file_exists( $filename ) ) { return file_get_contents( $filename ); }
+        return null;
     }
     
     /**
@@ -118,7 +132,11 @@ class DaemonService {
      */
     public static function getFileName( $filename ) {
         $fullFilename = self::$path.'/'.$filename;
-        if( ! is_dir( dirname( $fullFilename ) ) ) { mkdir( dirname( $fullFilename ), 0755, true ); }
+        if( ! is_dir( dirname( $fullFilename ) ) ) {
+            $old = umask( self::$umask );
+            mkdir( dirname( $fullFilename ), self::$mode, true );
+            umask( $old );
+        }
         return $fullFilename;
     }
     
