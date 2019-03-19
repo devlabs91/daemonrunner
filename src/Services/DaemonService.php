@@ -5,7 +5,7 @@ use Clio;
 
 class DaemonService {
     
-    private static $path = "/tmp/daemonservice";
+    private static $path = "/tmp/daemonrunner";
     private static $umask = '0000';
     private static $mode = '0777';
     
