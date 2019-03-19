@@ -6,7 +6,6 @@ use Clio;
 class DaemonService {
     
     private static $path = "/tmp/daemonrunner";
-    private static $mode = '0755';
     
     private static $service;
     
@@ -129,7 +128,7 @@ class DaemonService {
     public static function getFileName( $filename ) {
         $fullFilename = self::$path.'/'.$filename;
         if( ! is_dir( dirname( $fullFilename ) ) ) {
-            mkdir( dirname( $fullFilename ), self::$mode, true );
+            mkdir( dirname( $fullFilename ), 0777, true );
         }
         return $fullFilename;
     }
